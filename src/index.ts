@@ -1,4 +1,6 @@
 import express from 'express'
+import { graphqlHTTP } from 'express-graphql'
+import { buildSchema } from 'graphql'
 import { config } from 'dotenv'
 import cors from 'cors'
 
@@ -8,10 +10,28 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.get('/api/v1/', (req, res) => {
-  res.status(200).json({ message: 'Welcome!' })
-})
+const schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`)
 
-app.listen(process.env.PORT, () => {
+// Root provides a resolver function for each API endpoint
+const rootValue = {
+  hello: () => {
+    return 'Hello!'
+  },
+}
+
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    rootValue,
+    schema,
+    graphiql: true,
+  })
+)
+
+app.listen(process.env.PORT || 8080, () => {
   console.log(`App running on port ${process.env.PORT}.`)
 })
