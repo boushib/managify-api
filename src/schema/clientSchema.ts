@@ -6,7 +6,7 @@ import {
 } from 'graphql'
 import { CLIENTS } from '../data'
 
-const Client = new GraphQLObjectType({
+export const Client = new GraphQLObjectType({
   name: 'Client',
   fields: () => ({
     id: { type: GraphQLID },

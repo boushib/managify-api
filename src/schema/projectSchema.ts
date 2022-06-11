@@ -4,9 +4,10 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql'
-import { PROJECTS } from '../data'
+import { CLIENTS, PROJECTS } from '../data'
+import { Client } from './clientSchema'
 
-const Project = new GraphQLObjectType({
+export const Project = new GraphQLObjectType({
   name: 'Project',
   fields: () => ({
     id: { type: GraphQLID },
@@ -14,6 +15,12 @@ const Project = new GraphQLObjectType({
     name: { type: GraphQLString },
     description: { type: GraphQLString },
     status: { type: GraphQLString },
+    client: {
+      type: Client,
+      resolve: parent => {
+        return CLIENTS.find(c => c.id === parent.clientId)
+      },
+    },
   }),
 })
 
