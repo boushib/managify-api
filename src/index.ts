@@ -1,32 +1,19 @@
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
-import { buildSchema } from 'graphql'
 import { config } from 'dotenv'
 import cors from 'cors'
+import schema from './schema'
 
 config()
 const app = express()
+
 // middlewares
 app.use(express.json())
 app.use(cors())
 
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`)
-
-// Root provides a resolver function for each API endpoint
-const rootValue = {
-  hello: () => {
-    return 'Hello!'
-  },
-}
-
 app.use(
   '/graphql',
   graphqlHTTP({
-    rootValue,
     schema,
     graphiql: true,
   })
