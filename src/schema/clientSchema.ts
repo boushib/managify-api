@@ -47,3 +47,13 @@ export const addClient = {
     return client.save()
   },
 }
+
+export const deleteClient = {
+  type: ClientType,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLID) },
+  },
+  resolve: (_parent: any, args: any) => {
+    return Client.findByIdAndDelete(args.id)
+  },
+}
