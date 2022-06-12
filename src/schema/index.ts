@@ -1,5 +1,11 @@
 import { GraphQLObjectType, GraphQLSchema } from "graphql"
-import { clients, client, addClient, deleteClient } from "./clientSchema"
+import {
+  clients,
+  client,
+  addClient,
+  updateClient,
+  deleteClient,
+} from "./clientSchema"
 import { projects, project, addProject } from "./projectSchema"
 
 const query = new GraphQLObjectType({
@@ -9,7 +15,7 @@ const query = new GraphQLObjectType({
 
 const mutation = new GraphQLObjectType({
   name: "RootMutation",
-  fields: { addClient, deleteClient, addProject },
+  fields: { addClient, updateClient, deleteClient, addProject },
 })
 
 export default new GraphQLSchema({ query, mutation })

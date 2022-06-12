@@ -48,6 +48,24 @@ export const addClient = {
   },
 }
 
+export const updateClient = {
+  type: ClientType,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLID) },
+    name: { type: GraphQLString },
+    email: { type: GraphQLString },
+    phone: { type: GraphQLString },
+  },
+  resolve: (_parent: any, args: any) => {
+    const { name, email, phone } = args
+    return Client.findByIdAndUpdate(
+      args.id,
+      { $set: { name, email, phone } },
+      { new: true }
+    )
+  },
+}
+
 export const deleteClient = {
   type: ClientType,
   args: {
