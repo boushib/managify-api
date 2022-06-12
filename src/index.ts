@@ -1,8 +1,10 @@
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
 import { config } from 'dotenv'
+import 'colors'
 import cors from 'cors'
 import schema from './schema'
+import { connectDB } from './database'
 
 config()
 const app = express()
@@ -18,6 +20,8 @@ app.use(
     graphiql: true,
   })
 )
+
+connectDB()
 
 const PORT = process.env.PORT || 8080
 

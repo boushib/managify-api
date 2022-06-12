@@ -1,13 +1,14 @@
 import {
   GraphQLID,
   GraphQLList,
+  GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
-} from 'graphql'
-import { CLIENTS } from '../data'
+} from "graphql"
+import Client from "../models/client"
 
-export const Client = new GraphQLObjectType({
-  name: 'Client',
+export const ClientType = new GraphQLObjectType({
+  name: "Client",
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -17,18 +18,32 @@ export const Client = new GraphQLObjectType({
 })
 
 export const clients = {
-  type: new GraphQLList(Client),
+  type: new GraphQLList(ClientType),
   resolve() {
-    return CLIENTS
+    return Client.find()
   },
 }
 
 export const client = {
-  type: Client,
+  type: ClientType,
   args: {
     id: { type: GraphQLID },
   },
-  resolve(parent: any, args: any) {
-    return CLIENTS.find(c => c.id === args.id)
+  resolve(_parent: any, args: any) {
+    return Client.findById(args.id)
+  },
+}
+
+export const addClient = {
+  type: ClientType,
+  args: {
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    phone: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  resolve: (_parent: any, args: any) => {
+    const { name, email, phone } = args
+    const client = new Client({ name, email, phone })
+    return client.save()
   },
 }
